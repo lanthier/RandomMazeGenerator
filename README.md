@@ -10,5 +10,5 @@ A random maze generator on a canvas written in javascript and painted on a Canva
 - Have more algorithms available.
 - Change variable names inside algorithms
 - Futher increase algorithm speed
-+ Make size of grid equal to canvas size
+` Make size of grid equal to canvas size
 
