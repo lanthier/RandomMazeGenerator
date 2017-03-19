@@ -19,6 +19,9 @@ function Maze(gridSize, cellSize) {
     else if(algorithm=="Sidewinder") {
       grid.sidewinder();
     }
+    else {
+      throw 'Algorithm given does not exist. Use "Aldous Broder" or "Sidewinder"';
+    }
     grid.draw(context);
   }
 };
@@ -98,6 +101,9 @@ function Cell(xPos, yPos, sz) {
   this.visit = function() {
     visited=true;
   };
+  this.print = function() {
+    console.log(this);
+  }
 };
 function Grid(gridSize, cellSize) {
   var cell = [];
@@ -127,7 +133,14 @@ function Grid(gridSize, cellSize) {
       }
     }
   };
-  this.sideWinder = function() {
+  this.print = function() {
+    for(var i = 0; i < gridSize; i++) {
+      for(var j = 0; j < gridSize; j++) {
+        cell[i][j].print();
+      }
+    }
+  }
+  this.sidewinder = function() {
     for(var j = gridSize-1; j >= 0; j--) {
       var k = 1; //The run
       for(var i = 0; i < gridSize; i++) {

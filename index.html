@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <canvas id="myCanvas" width="300" height="300" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+<canvas id="yourCanvas" width="300" height="300" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
+  <script src="Maze.js"></script>
+  <script>
+  var c = document.getElementById("myCanvas");
+  var ctx = c.getContext("2d");
+
+  var maze  = new Maze(30,10);
+  maze.create(ctx,"Aldous Broder");
+  clearCanvas(c);
+
+  function clearCanvas(cnv) {
+    var ctx = cnv.getContext('2d');     // gets reference to canvas context
+    ctx.beginPath();    // clear existing drawing paths
+    ctx.save();         // store the current transformation matrix
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillRect(0, 0, cnv.width, cnv.height);
+    ctx.restore();        // restore the transform
+  }
+</script>
+</body>
+</html>
