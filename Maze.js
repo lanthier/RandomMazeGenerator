@@ -7,6 +7,12 @@ Maze.create -> Generates a random maze with the given algorithm, draws it
  context -> The 2D Canvas context
  algorithm -> The String name of the algorithm
 */
+var direction = Object.freeze({
+  NORTH : 1,
+  EAST : 2,
+  SOUTH : 3,
+  WEST : 4
+});
 function Maze(gridSize, cellSize) {
   var gridLength = gridSize;
   var cellLength = cellSize;
@@ -16,7 +22,7 @@ function Maze(gridSize, cellSize) {
     if(algorithm==="Aldous Broder") {
       grid.aldousbroder();
     }
-    else if(algorithm=="Sidewinder") {
+    else if(algorithm==="Sidewinder") {
       grid.sidewinder();
     }
     else {
@@ -24,7 +30,7 @@ function Maze(gridSize, cellSize) {
     }
     grid.draw(context);
   }
-};
+}
 
 function Cell(xPos, yPos, sz) {
   var x = xPos*sz;
@@ -51,25 +57,29 @@ function Cell(xPos, yPos, sz) {
     westWall ? context.lineTo(x,y) : context.moveTo(x,y);
     context.stroke();
   };
-  this.carveNorth = function() {
-    if(northCell)
-      northCell.setSouthWall(false);
-    northWall = false;
-  };
-  this.carveEast = function() {
-    if(eastCell)
-      eastCell.setWestWall(false);
-    eastWall = false;
-  };
-  this.carveSouth = function() {
-    if(southCell)
-      southCell.setNorthWall(false);
-    southWall=false;
-  };
-  this.carveWest = function() {
-    if(westCell)
-      westCell.setEastWall(false);
-    westWall=false;
+  this.carve = function(dir) {
+    switch(dir) {
+      case direction.NORTH:
+        if(northCell)
+          northCell.setSouthWall(false);
+        northWall= false;
+        break;
+      case direction.EAST:
+        if(eastCell)
+          eastCell.setWestWall(false);
+        eastWall = false;
+        break;
+      case direction.SOUTH:
+        if(southCell)
+          southCell.setNorthWall(false);
+        southWall = false;
+        break;
+      case direction.WEST:
+        if(westCell)
+          westCell.setEastWall(false);
+        westWall = false;
+        break;
+    }
   };
   this.setNorthCell = function(cell) {
     northCell = cell;
@@ -116,7 +126,7 @@ function Grid(gridSize, cellSize) {
   }
   for(var i = 0; i < gridSize; i++) {
     for(var j = 0; j < gridSize; j++) {
-      if(j!=0)
+      if(j!==0)
         cell[i][j].setNorthCell(cell[i][j-1]);
       if(i+1!==gridSize)
         cell[i][j].setEastCell(cell[i+1][j]);
@@ -147,18 +157,18 @@ function Grid(gridSize, cellSize) {
         if(i+1===gridSize && j===0) //Northeast corner
           continue;
         else if(j===0) //Furthest north cells
-          cell[i][j].carveEast();
+          cell[i][j].carve(direction.EAST);
         else {
           var a = Math.random();
           if(a > .5) {//Go east
             k++;
-            cell[i][j].carveEast();
+            cell[i][j].carve(direction.EAST);
           }
           else { //Go north
             if(k===1)
-              cell[i][j].carveNorth();
+              cell[i][j].carve(direction.NORTH);
             else {
-              this.randCellOutOfRun(i,j,k-1).carveNorth();
+              this.randCellOutOfRun(i,j,k-1).carve(direction.NORTH);
               k=1;
             }
           }
@@ -183,49 +193,41 @@ function Grid(gridSize, cellSize) {
 
     var c;
     var visitCount=0;
-    while(visitCount!=gridSize*gridSize) {
+    while(visitCount!==gridSize*gridSize) {
 
       c = Math.random();
       if(c<.25) { //North
         if(b!==0) {
-          if(!cell[a][b-1].getVisited()) {
-            cell[a][b-1].visit();
-            cell[a][b].carveNorth();
-            visitCount++;
-          }
+          visitCount += this.tryMove(cell[a][b],cell[a][b-1], direction.NORTH);
           b--; //Move North
         }
       }
       else if(c<.50) {//East
         if(a+1!==gridSize) {
-          if(!cell[a+1][b].getVisited()) {
-            cell[a+1][b].visit();
-            cell[a][b].carveEast();
-            visitCount++;
-          }
+          visitCount += this.tryMove(cell[a][b],cell[a+1][b], direction.EAST);
           a++;
         }
       }
       else if (c<.75) {
         if(b+1!==gridSize) {
-          if(!cell[a][b+1].getVisited()) {
-            cell[a][b+1].visit();
-            cell[a][b].carveSouth();
-            visitCount++;
-          }
+          visitCount += this.tryMove(cell[a][b],cell[a][b+1], direction.SOUTH);
           b++;
         }
       }
       else {
         if(a!==0) {
-          if(!cell[a-1][b].getVisited()) {
-            cell[a-1][b].visit();
-            cell[a][b].carveWest();
-            visitCount++;
-          }
+          visitCount += this.tryMove(cell[a][b],cell[a-1][b], direction.WEST);
           a--;
         }
       }
     }
+  };
+  this.tryMove = function(A,B, dir) {
+    if(!B.getVisited()) {
+      B.visit();
+      A.carve(dir);
+      return 1;
+    }
+    return 0;
   };
 }
