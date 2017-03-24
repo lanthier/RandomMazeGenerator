@@ -13,7 +13,7 @@ function Maze(gridSize, cellSize) {
   var grid;
   this.create = function(context,algorithm) {
     grid = new Grid(gridLength, cellLength);
-    if(algorithm=="Aldous Broder") {
+    if(algorithm==="Aldous Broder") {
       grid.aldousbroder();
     }
     else if(algorithm=="Sidewinder") {
@@ -104,7 +104,7 @@ function Cell(xPos, yPos, sz) {
   this.print = function() {
     console.log(this);
   }
-};
+}
 function Grid(gridSize, cellSize) {
   var cell = [];
   for(var i = 0; i < gridSize; i++) {
@@ -118,11 +118,11 @@ function Grid(gridSize, cellSize) {
     for(var j = 0; j < gridSize; j++) {
       if(j!=0)
         cell[i][j].setNorthCell(cell[i][j-1]);
-      if(i+1!=gridSize)
+      if(i+1!==gridSize)
         cell[i][j].setEastCell(cell[i+1][j]);
-      if(j+1!=gridSize)
+      if(j+1!==gridSize)
         cell[i][j].setSouthCell(cell[i][j+1]);
-      if(i!=0)
+      if(i!==0)
         cell[i][j].setWestCell(cell[i-1][j]);
     }
   }
@@ -144,9 +144,9 @@ function Grid(gridSize, cellSize) {
     for(var j = gridSize-1; j >= 0; j--) {
       var k = 1; //The run
       for(var i = 0; i < gridSize; i++) {
-        if(i+1==gridSize && j==0) //Northeast corner
+        if(i+1===gridSize && j===0) //Northeast corner
           continue;
-        else if(j==0) //Furthest north cells
+        else if(j===0) //Furthest north cells
           cell[i][j].carveEast();
         else {
           var a = Math.random();
@@ -155,7 +155,7 @@ function Grid(gridSize, cellSize) {
             cell[i][j].carveEast();
           }
           else { //Go north
-            if(k==1)
+            if(k===1)
               cell[i][j].carveNorth();
             else {
               this.randCellOutOfRun(i,j,k-1).carveNorth();
@@ -187,7 +187,7 @@ function Grid(gridSize, cellSize) {
 
       c = Math.random();
       if(c<.25) { //North
-        if(b!=0) {
+        if(b!==0) {
           if(!cell[a][b-1].getVisited()) {
             cell[a][b-1].visit();
             cell[a][b].carveNorth();
@@ -197,7 +197,7 @@ function Grid(gridSize, cellSize) {
         }
       }
       else if(c<.50) {//East
-        if(a+1!=gridSize) {
+        if(a+1!==gridSize) {
           if(!cell[a+1][b].getVisited()) {
             cell[a+1][b].visit();
             cell[a][b].carveEast();
@@ -207,7 +207,7 @@ function Grid(gridSize, cellSize) {
         }
       }
       else if (c<.75) {
-        if(b+1!=gridSize) {
+        if(b+1!==gridSize) {
           if(!cell[a][b+1].getVisited()) {
             cell[a][b+1].visit();
             cell[a][b].carveSouth();
@@ -217,7 +217,7 @@ function Grid(gridSize, cellSize) {
         }
       }
       else {
-        if(a!=0) {
+        if(a!==0) {
           if(!cell[a-1][b].getVisited()) {
             cell[a-1][b].visit();
             cell[a][b].carveWest();
@@ -228,4 +228,4 @@ function Grid(gridSize, cellSize) {
       }
     }
   };
-};
+}
