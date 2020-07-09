@@ -1,4 +1,4 @@
-# RandomMazeGenerator
+# Random Maze Generator
 A random maze generator on a canvas written in javascript and painted on a Canvas.
 
 ## Improvements Made
