@@ -13,10 +13,8 @@ A random maze generator on a canvas written in javascript and painted on a Canva
 
 ## Future Development Plans
 - Have more algorithms available.
-- Change variable names inside algorithms
 - Futher improve algorithm speed
-- Create exits/entrances 
+- Create exits/entrances
 
 ## Other Ideas
-- Make the length and width of the grid independent and set it equal to the Canvas length and width.
-
+- Make the length and width of the grid variable
